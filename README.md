@@ -20,7 +20,7 @@ Under **Map of Ports** section, users can select the Year from a dropdown list. 
 
 ## Links for App and Pitch Presetation
 
-Please view my App [here at shinyapps.io](https://xyou.shinyapps.io/fisheriesactivityexplorer/). 
+Please view my App [here at shinyapps.io](http://xyou.shinyapps.io/fisheriesactivityexplorer/). 
 
 Please view my 5-slide pitch presentation [here at rpubs](http://rpubs.com/angashley/UK-Fisheries-Activity-Explorer). 
 
