@@ -1,0 +1,110 @@
+
+
+```{r setup, include=FALSE}
+opts_chunk$set(cache=TRUE)
+```
+
+<style>
+.small-code pre code {
+  font-size: 0.875em;
+}
+</style>
+
+<style>
+
+/* slide titles */
+.reveal h3 { 
+  font-size: 50px;
+  color: blue;
+  font-weight: bold;
+}
+
+/* heading for slides with two hashes ## */
+.reveal .slides section .slideContent h2 {
+   font-size: 30px;
+   font-weight: bold;
+   color: green;
+}
+
+/* ordered and unordered list styles */
+.reveal ul, 
+.reveal ol {
+    font-size: 30px;
+    color: black;
+    list-style-type: square;
+}
+
+</style>
+
+My Shiny App - UK Fisheries Activity Explorer dashboard
+========================================================
+author: Ashley You
+date: 8th September, 2017
+autosize: true
+transition: rotate
+transition-speed: fast
+font-family: 'Helvetica'
+<div>
+<img src="fig/shooting_star.png" width=150 height=150>
+</div>
+
+Introduction
+========================================================
+id: intro
+left: 40%
+The [**UK Fisheries Activity Explorer**](http://xyou.shinyapps.io/fisheriesactivityexplorer/) dashboard allows an interactive exploration into commercial fishing activity in the UK and surrounding areas from 2014 to 2017 (year to date). 
+***
+<div align="center">
+<img src="fig/dashboard.png" width=800 height=400>
+</div>
+
+There are two sections: **Charts** and **Map of Ports**. 
+
+
+Data
+========================================================
+class: small-code
+Data for the dashboard's **Charts** section were sourced from UK Government website. Fishing ports were geolocated using `geocode()` function from `ggmap` package, thus producing the map in **Map of Ports** section. Let's take a look at the master dataset `fisheriesData`. 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+fisheriesData <- read.csv("www/fisheriesData.csv",header = TRUE,stringsAsFactors = FALSE)
+
+fisheriesData$Date <- as.Date(fisheriesData$Date)
+```
+
+```{r}
+head(fisheriesData,2)
+```
+
+Sample codes for reactive calculation
+========================================================
+class: small-code
+
+The App was designed using shiny's `flexdashboard` package and deployed on [**shinyapps.io**](http://xyou.shinyapps.io/fisheriesactivityexplorer/) website. `Plotly` package is applied to all charts to enhance interactivity. Below are sample codes where ggplotly responds to user input to radio button **Criteria**. Full codes can be found in my github repository ([Go to view full codes](https://github.com/Angashley/Shiny-Application-and-Reproducible-Pitch)). 
+
+```{r, eval=FALSE, include=TRUE}
+string <- reactive(substring(input$Criteria,1,5))
+
+output$plot1 <- renderPlotly ({ 
+        if (string() == "Live ") { 
+   p1 <-   ggplot(fisheries_trim, aes(x = Month.number, y = Live.Weight, fill = Year, colour = Year)) + geom_point(size = 6, shape = 18) + scale_x_continuous(name="Month of the Year", breaks=seq(1,12,1),labels= c("Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) + scale_y_continuous(name="Live Weight in '000 tonnes") + ggtitle("Fisheries activity over 12 months (Live Weight)") + theme(plot.title = element_text(size=12, face="bold")) 
+   
+   ggplotly(p1)%>%layout(margin=list(l=70, b=120))
+        }  
+```
+
+References
+========================================================
+
+1. Using shiny with flexdashboard. [Basics](http://rmarkdown.rstudio.com/flexdashboard/shiny.html)
+
+2. L. Kiefer. A guide to building an interactive flexdashboard. 22nd January 2017. [App example](http://lenkiefer.com/2017/01/22/build-flex)
+
+3. J. Paulson. R Presentations. 15th January, 2017. [Articles](https://support.rstudio.com/hc/en-us/articles/200532307-Customizing-Fonts-and-Appearance)
+
+4. UK and foreign vessels landings by UK port and UK vessel landings abroad: 2014, 2015, 2016 and 2017 (year to date). [Latest dataset](https://www.gov.uk/government/statistical-data-sets/uk-and-foreign-vessels-landings-by-uk-port-and-uk-vessel-landings-abroad)
+
+***
+<div align="center">
+<img src="fig/shooting_star.png" width=400 height=300>
+</div>
